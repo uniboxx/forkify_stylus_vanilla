@@ -12,6 +12,7 @@
     "vite": "^5.2.0"
   },
   "dependencies": {
+    "fracty": "^1.0.11",
     "stylus": "^0.63.0"
   }
 }
