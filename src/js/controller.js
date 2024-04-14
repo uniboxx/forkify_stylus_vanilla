@@ -1,13 +1,6 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
-
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
+import searchView from './views/searchView.js';
 
 // https://forkify-api.herokuapp.com/v2
 // https://forkify-api.herokuapp.com/api/v2/recipes
@@ -27,10 +20,21 @@ async function controlRecipes() {
     // Render recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
-    console.log(err);
+    recipeView.renderError();
   }
 }
 
-['hashchange', 'load'].forEach(ev =>
-  window.addEventListener(ev, controlRecipes),
-);
+async function controlSearchResults() {
+  const query = searchView.getQuery();
+  if (!query) return;
+
+  await model.loadSearchResults(query);
+  console.log(model.state.search.results);
+}
+controlSearchResults();
+
+function init() {
+  recipeView.addHandlerRender(controlRecipes);
+  searchView.addHandlerSearch(controlSearchResults);
+}
+init();

@@ -3,6 +3,8 @@ import fracty from 'fracty';
 class RecipeView {
   #parentEl = document.querySelector('.recipe');
   #data;
+  #errorMessage = `We could not find that recipe. Please try another one!`;
+  #message = ``;
 
   #clear() {
     this.#parentEl.innerHTML = '';
@@ -19,6 +21,34 @@ class RecipeView {
     this.#parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
+  renderError(message = this.#errorMessage) {
+    const markup = `
+    <div class="error">
+      <div>
+        <svg>
+          <use href="src/img/icons.svg#icon-alert-triangle"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>`;
+    this.#clear();
+    this.#parentEl.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderMessage(message = this.#message) {
+    const markup = `
+    <div class="message">
+      <div>
+        <svg>
+          <use href="src/img/icons.svg#icon-smile"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>`;
+    this.#clear();
+    this.#parentEl.insertAdjacentHTML('afterbegin', markup);
+  }
+
   render(data) {
     this.#data = data;
     const markup = this.#generateMarkup();
@@ -26,8 +56,11 @@ class RecipeView {
     this.#parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
+
   #generateMarkup() {
-    console.log(this.#data.ingredients);
     return `
     <figure class="recipe__fig">
       <img src="${this.#data.image}" alt="${
@@ -86,7 +119,7 @@ class RecipeView {
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">
-        ${this.#data.ingredients.reduce(
+        ${this.#data.ingredients?.reduce(
           (acc, el) =>
             (acc += `<li class="recipe__ingredient">
         <svg class="recipe__icon">
