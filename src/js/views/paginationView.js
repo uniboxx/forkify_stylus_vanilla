@@ -12,7 +12,7 @@ class PaginationView extends View {
     });
   }
 
-  _generateMarkupBtn(type, currentPage) {
+  _generateBtnMarkup(type, currentPage) {
     const templateBtn =
       type === 'prev'
         ? `
@@ -29,8 +29,7 @@ class PaginationView extends View {
         type === 'prev' ? currentPage - 1 : currentPage + 1
       }" class="btn--inline pagination__btn--${type}">` +
       templateBtn +
-      `
-      </button>`
+      `</button>`
     );
   }
 
@@ -42,13 +41,13 @@ class PaginationView extends View {
 
     if (numberOfPages === 1) return '';
     else if (currentPage === numberOfPages)
-      return this._generateMarkupBtn('prev', currentPage);
+      return this._generateBtnMarkup('prev', currentPage);
     else if (currentPage === 1)
-      return this._generateMarkupBtn('next', currentPage);
+      return this._generateBtnMarkup('next', currentPage);
     else
       return (
-        this._generateMarkupBtn('prev', currentPage) +
-        this._generateMarkupBtn('next', currentPage)
+        this._generateBtnMarkup('prev', currentPage) +
+        this._generateBtnMarkup('next', currentPage)
       );
   }
 }
