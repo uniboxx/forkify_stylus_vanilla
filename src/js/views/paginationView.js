@@ -1,4 +1,5 @@
 import View from './view.js';
+import icons from '../../img/icons.svg';
 
 class PaginationView extends View {
   _parentEl = document.querySelector('.pagination');
@@ -17,12 +18,12 @@ class PaginationView extends View {
       type === 'prev'
         ? `
       <svg class="search__icon">
-        <use href="src/img/icons.svg#icon-arrow-left"></use>
+        <use href="${icons}#icon-arrow-left"></use>
       </svg>
       <span>Page ${currentPage - 1}</span>`
         : `<span>Page ${currentPage + 1}</span>
       <svg class="search__icon">
-        <use href="src/img/icons.svg#icon-arrow-right"></use>
+        <use href="${icons}#icon-arrow-right"></use>
       </svg>`;
     return (
       `<button data-goto="${

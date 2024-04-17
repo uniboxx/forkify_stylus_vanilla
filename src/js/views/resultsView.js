@@ -1,4 +1,5 @@
 import View from './view.js';
+import icons from '../../img/icons.svg';
 
 class ResultsView extends View {
   _parentEl = document.querySelector('.results');
@@ -19,7 +20,7 @@ class ResultsView extends View {
             <p class="preview__publisher">${el.publisher}</p>
             <!--<div class="preview__user-generated">
               <svg>
-                <use href="src/img/icons.svg#icon-user"></use>
+                <use href="${icons}#icon-user"></use>
               </svg>
             </div>-->
           </div>
