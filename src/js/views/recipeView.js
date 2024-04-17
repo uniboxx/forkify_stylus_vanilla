@@ -24,7 +24,7 @@ class RecipeView extends View {
     <div class="recipe__details">
       <div class="recipe__info">
         <svg class="recipe__info-icon">
-          <use href="src/img/icons.svg#icon-clock"></use>
+          <use href="./src/img/icons.svg#icon-clock"></use>
         </svg>
         <span class="recipe__info-data recipe__info-data--minutes">${
           this._data.cookingTime
