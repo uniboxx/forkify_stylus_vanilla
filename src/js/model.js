@@ -38,7 +38,7 @@ export async function loadRecipe(id) {
   if (state.bookmarks.some(bookmark => bookmark.id === id))
     state.recipe.bookmarked = true;
   else state.recipe.bookmarked = false;
-  console.log(state.recipe);
+  // console.log(state.recipe);
 }
 
 export async function loadSearchResults(query) {
