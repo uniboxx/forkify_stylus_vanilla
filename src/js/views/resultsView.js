@@ -1,5 +1,5 @@
 import View from './view.js';
-import icons from '../../img/icons.svg';
+import previewView from './previewView.js';
 
 class ResultsView extends View {
   _parentEl = document.querySelector('.results');
@@ -7,30 +7,7 @@ class ResultsView extends View {
   _message = '';
 
   _generateMarkup() {
-    const id = window.location.hash.slice(1);
-
-    return this._data.reduce((acc, el) => {
-      return (acc += `
-      <li class="preview">
-        <a class="preview__link ${
-          id === el.id ? 'preview__link--active' : ''
-        }" href="#${el.id}">
-          <figure class="preview__fig">
-            <img src="${el.image}" alt="${el.title}" />
-          </figure>
-          <div class="preview__data">
-            <h4 class="preview__title">${el.title}</h4>
-            <p class="preview__publisher">${el.publisher}</p>
-            <!--<div class="preview__user-generated">
-              <svg>
-                <use href="${icons}#icon-user"></use>
-              </svg>
-            </div>-->
-          </div>
-        </a>
-    </li>
-      `);
-    }, '');
+    return this._data.map(result => previewView.render(result, false)).join('');
   }
 }
 export default new ResultsView();

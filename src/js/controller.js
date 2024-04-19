@@ -3,6 +3,9 @@ import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
+import bookmarksView from './views/bookmarksView.js';
+import addRecipeView from './views/addRecipeView.js';
+import { MODAL_CLOSE_SEC } from './config.js';
 
 //^ ENABLE HOT MODULE RELOAD
 // import.meta.hot?.accept();
@@ -21,6 +24,8 @@ async function controlRecipes() {
 
     // update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage());
+    // update bookmarks view
+    bookmarksView.update(model.state.bookmarks);
 
     // Loading recipe
     await model.loadRecipe(id);
@@ -29,6 +34,7 @@ async function controlRecipes() {
     recipeView.render(model.state.recipe);
   } catch (err) {
     recipeView.renderError();
+    console.error(err);
   }
 }
 
@@ -61,10 +67,55 @@ function controlServings(newServings) {
   recipeView.update(model.state.recipe);
 }
 
+function controlAddRemoveBookmark() {
+  // 1) add or remove bookmarks
+  if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
+  else model.removeBookmark(model.state.recipe.id);
+  // 2) update recipe view
+  recipeView.update(model.state.recipe);
+  // 3) render bookmarks view
+  bookmarksView.render(model.state.bookmarks);
+}
+
+function controlBookmarks() {
+  bookmarksView.render(model.state.bookmarks);
+}
+
+async function controlAddRecipe(newRecipe) {
+  try {
+    // show spinner
+    addRecipeView.renderSpinner();
+
+    await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    // render recipe
+    recipeView.render(model.state.recipe);
+    // update hash
+    // window.location.hash = '#' + model.state.recipe.id;
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+
+    // display success message
+    addRecipeView.renderMessage();
+
+    // render bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // close form window
+    setTimeout(() => addRecipeView.toggleWindow(), MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    console.error(err);
+    addRecipeView.renderError(err.message);
+  }
+}
+
 function init() {
+  bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
+  recipeView.addhandlerAddRemoveBookmark(controlAddRemoveBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
+  addRecipeView.addHandlerUpload(controlAddRecipe);
 }
 init();
