@@ -21,6 +21,7 @@ concurrency:
   group: 'pages'
   cancel-in-progress: false
 
+# Allow repo secrets
 env:
   VITE_API_KEY: ${{secrets.VITE_API_KEY}}
 
